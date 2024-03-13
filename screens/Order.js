@@ -1,16 +1,17 @@
 import { View, Text } from "react-native";
 import React from "react";
 import MainHeader from "../components/MainHeader";
-
-const Home = ({navigation}) => {
+const Order = () => {
   return (
     <>
-      <MainHeader iconHeader={"home-outline"} navigation={navigation} />
+      <MainHeader
+        iconHeader={"document-text-outline"}
+      />
       <View>
-        <Text>Home</Text>
+        <Text>Order</Text>
       </View>
     </>
   );
 };
 
-export default Home;
+export default Order;

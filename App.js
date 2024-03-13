@@ -11,6 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import LoginScreen from './screens/Login';
 import HomeScreen from './screens/Home';
+import OrderScreen from './screens/Order'
 import HistoryScreen from './screens/History';
 import ProfileScreen from './screens/Profile';
 
@@ -30,9 +31,18 @@ const TabRoute = () => {
           height: 60,
         }
       }}>
+        <Tab.Screen
+        name="Trang chủ"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ focused, color }) => {
+            return <Icon name={focused ? `home`:`home-outline` } color={color} size={25} />;
+          },
+          headerShown: false,
+        }} />
       <Tab.Screen
         name="Đơn hàng"
-        component={HomeScreen}
+        component={OrderScreen}
         options={{
           tabBarIcon: ({ focused, color }) => {
             return <Icon name={focused ? `document-text`:`document-text-outline` } color={color} size={25} />;
@@ -58,8 +68,7 @@ const TabRoute = () => {
             return focused ? <Icon name="person" color={color} size={30} />
             : <Icon name="person-outline" color={color} size={28} />;
           },
-          headerShown: true,
-
+          headerShown: false,
         }} />
     </Tab.Navigator>
   )
@@ -71,6 +80,7 @@ export default function App() {
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Login">
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Home" component={TabRoute} />
+      <Stack.Screen name="Order" component={OrderScreen} />
       <Stack.Screen name="History" component={HistoryScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
 
