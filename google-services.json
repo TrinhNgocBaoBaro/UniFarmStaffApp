@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "771636929598",
+    "project_id": "unifarmstaffapp",
+    "storage_bucket": "unifarmstaffapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:771636929598:android:e24786f31417d44f7a9d6f",
+        "android_client_info": {
+          "package_name": "com.ngocbao159.UniFarmStaffApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKBBYfAxpPAKfjLHD-6ja6q5mKmf9SNco"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
