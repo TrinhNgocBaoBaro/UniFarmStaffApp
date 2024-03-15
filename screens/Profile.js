@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Image,
   Pressable,
-  StatusBar
+  StatusBar, 
+  ScrollView,
+  SafeAreaView
 } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -41,15 +43,20 @@ const Profile = ({ navigation }) => {
     },
   ];
 
+  const handleLogOut = () => {
+    navigation.popToTop();
+  }
+
   const renderSettingsItem = ({ icon, text, sub }) => (
     <TouchableOpacity
       activeOpacity={0.8}
       style={{
         flexDirection: "row",
         alignItems: "center",
-        paddingVertical: 8,
-        paddingLeft: 20,
+        paddingVertical: 15,
+        paddingHorizontal: 20,
         backgroundColor: "white",
+        justifyContent: 'space-between'
       }}
     >
       <Icon name={icon} size={24} color="grey" />
@@ -57,27 +64,28 @@ const Profile = ({ navigation }) => {
         style={{
           marginLeft: 15,
           fontSize: 15,
-          minWidth: 200,
+          minWidth: 250,
           fontWeight: 500,
         }}
       >
         {text}
       </Text>
+      <View style={{alignSelf: 'flex-end'}}>
       <Icon
         name={sub}
         size={24}
         color="grey"
         style={{
-          marginLeft: 70,
           fontWeight: 600,
           fontSize: 24,
         }}
       />
+      </View>
     </TouchableOpacity>
   );
   return (
     <>
-      <View style={styles.top}>
+      <SafeAreaView style={styles.top}>
         <Pressable onPress={()=> navigation.goBack()}>
         <View style={{ height: 40, width: 40, marginLeft: 20, justifyContent: 'center' }}>
           <Icon name="chevron-back-outline" size={30} color={"black"} />
@@ -89,7 +97,8 @@ const Profile = ({ navigation }) => {
         <View style={{ marginRight: 20, height: 40, width: 40, justifyContent: 'center' }}>
           <Icon name="person-outline" size={30} color={"black"} />
         </View>
-      </View>
+      </SafeAreaView>
+      <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={styles.itemCard}>
         <Image
           source={{
@@ -116,6 +125,53 @@ const Profile = ({ navigation }) => {
           <Icon name="notifications-outline" size={28} color={"grey"} />
         </View>
       </View>
+      <View style={{marginHorizontal: 20}}>
+      <View style={{ marginBottom: 12 }}>
+          <Text style={{ marginVertical: 10, fontWeight: 'bold' }}>Tài khoản</Text>
+          <View
+            style={{
+              backgrounColor: "grey",
+              borderRadius: 5,
+              overflow: "hidden",
+              elevation: 2
+            }}
+          >
+            {cacheAndCellularItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {renderSettingsItem(item)}
+              </React.Fragment>
+            ))}
+          </View>
+      </View>
+
+        <View style={{ marginBottom: 12}}>
+          <Text style={{ marginVertical: 10, fontWeight: 'bold' }}>Cài đặt</Text>
+          <View
+            style={{
+              borderRadius: 5,
+              backgrounColor: 'grey',
+              overflow: "hidden",
+              elevation: 2
+            }}
+          >
+            {accountItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {renderSettingsItem(item)}
+              </React.Fragment>
+            ))}
+          </View>
+        </View>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={{ justifyContent: "center", alignItems: "center" }}
+            onPress={handleLogOut}
+          >
+            <View style={styles.btnContainer}>
+                <Text style={styles.btnText}>Đăng xuất</Text>
+            </View>
+          </TouchableOpacity>
+      </View>
+      </View>
     </>
   );
 };
@@ -136,7 +192,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: "white",
     fontSize: 15,
-    fontWeight: 500,
+    fontWeight: 'bold',
   },
   btnContainer: {
     backgroundColor: "red",
