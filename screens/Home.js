@@ -17,7 +17,7 @@ const dataDashboard = [
   },
   {
     id: 3,
-    name: "Số khách hàng",
+    name: "Khách hàng",
     quantity: "32",
     color: 'blue'
   },
@@ -49,7 +49,7 @@ const Home = ({ navigation }) => {
                 borderRadius: 10
               }}
             >
-              <Text style={{ color: "white", fontWeight: 'bold' }}>{item.name}</Text>
+              <Text style={{ color: "white", fontWeight: 'bold', fontSize: 17 }}>{item.name}</Text>
             </View>
           )}
           numColumns={2}

@@ -54,6 +54,7 @@ const Transfer = ({ navigation }) => {
               data={dataTransfer}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
+                  onPress={()=> navigation.navigate("DetailTransfer")}
                   activeOpacity={0.8}
                   style={{
                     backgroundColor: "white",
