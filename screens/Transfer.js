@@ -24,7 +24,11 @@ const dataTransfer = [
 ];
 
 const dataTransferDone = [
-
+  {
+    id: 3,
+    go_date: "12/12/2024",
+    done_date: "24/12/2024",
+  },
 ];
 
 const Transfer = ({ navigation }) => {
