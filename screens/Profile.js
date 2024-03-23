@@ -11,8 +11,30 @@ import {
 } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import createAxios from "../utils/axios";
+const API = createAxios();
 
 const Profile = ({ navigation }) => {
+
+  const [aboutMe, setAboutMe] = React.useState();
+
+  const getDataAboutMe = async ()  => {
+    try {
+      const response = await API.get("/aboutMe")
+      if(response) {
+        console.log("Success get aboutMe")
+        setAboutMe(response)
+      }
+    } catch (error) {
+      
+    }
+  }
+
+  React.useEffect(()=>{
+    getDataAboutMe();
+  },[])
+
   const cacheAndCellularItems = [
     {
       icon: "person-circle-outline",
@@ -88,15 +110,15 @@ const Profile = ({ navigation }) => {
       <SafeAreaView style={styles.top}>
         <Pressable onPress={()=> navigation.goBack()}>
         <View style={{ height: 40, width: 40, marginLeft: 20, justifyContent: 'center' }}>
-          <Icon name="chevron-back-outline" size={30} color={"black"} />
+          <Icon name="chevron-back-outline" size={28} color={"black"} />
         </View>
         </Pressable>
         <View style={{ justifyContent: 'center' }}> 
-            <Text style={{fontSize: 24, fontWeight: 'bold'}}>Tài khoản</Text>
+            <Text style={{fontSize: 22, fontWeight: 'bold'}}>Tài khoản</Text>
         </View>
-        <View style={{ marginRight: 20, height: 40, width: 40, justifyContent: 'center' }}>
-          <Icon name="person-outline" size={30} color={"black"} />
-        </View>
+        <Pressable style={{ marginRight: 20, height: 40, width: 40, justifyContent: 'center' }} onPress={getDataAboutMe}>
+          <Icon name="person-outline" size={25} color={"black"} />
+        </Pressable>
       </SafeAreaView>
       <View style={{flex: 1, backgroundColor: 'white'}}>
       <View style={styles.itemCard}>
@@ -115,17 +137,26 @@ const Profile = ({ navigation }) => {
           }}
         >
           <Text style={{ fontWeight: "bold", fontSize: 16, fontWeight: 500 }}>
-            Nguyễn Lê Hữu
+            {aboutMe && aboutMe.firstName} {aboutMe && aboutMe.lastName}
           </Text>
           <Text style={{ fontSize: 13, color: "grey", fontWeight: 500 }}>
-            stationStaff01@gmail.com
+          {aboutMe && aboutMe.email}
           </Text>
         </View>
         <View>
-          <Icon name="notifications-outline" size={28} color={"grey"} />
+          <Icon name="notifications-outline" size={26} color={"grey"} />
         </View>
       </View>
+
       <View style={{marginHorizontal: 20}}>
+      <View style={{marginBottom: 10}}>
+        <Text style={{ marginVertical: 10, fontWeight: 'bold' }}>Thông tin trạm</Text>
+        <View style={{borderWidth: 1, borderColor: '#d5d5d5', padding: 10, borderRadius: 8}}>
+        <Text style={{lineHeight: 30, fontSize: 17, fontWeight: '500'}}>{aboutMe && aboutMe.station.name}</Text>
+        <Text style={{lineHeight: 30, fontSize: 14, fontWeight: '500', color: 'grey'}}><Text style={{fontWeight: 'bold', color: 'black'}}>Mã số:</Text> {aboutMe && aboutMe.station.code}</Text>
+        <Text style={{lineHeight: 30, fontSize: 14, fontWeight: '500', color: 'grey', width: "80%"}}><Text style={{fontWeight: 'bold', color: 'black'}}>Địa chỉ:</Text> {aboutMe && aboutMe.station.address}</Text>
+        </View>
+      </View>
       <View style={{ marginBottom: 12 }}>
           <Text style={{ marginVertical: 10, fontWeight: 'bold' }}>Tài khoản</Text>
           <View

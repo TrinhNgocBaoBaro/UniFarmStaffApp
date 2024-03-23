@@ -24,11 +24,7 @@ const dataTransfer = [
 ];
 
 const dataTransferDone = [
-  {
-    id: 3,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
+
 ];
 
 const dataAll = [
@@ -36,36 +32,44 @@ const dataAll = [
     id: 1,
     go_date: "12/12/2024",
     done_date: "24/12/2024",
+    status: 'none'
   },
   {
     id: 2,
     go_date: "12/12/2024",
     done_date: "24/12/2024",
+    status: 'Received'
   },
   {
     id: 3,
     go_date: "12/12/2024",
     done_date: "24/12/2024",
+    status: 'none'
   },
   {
     id: 4,
     go_date: "12/12/2024",
     done_date: "24/12/2024",
+    status: 'notReceived'
+
   },
   {
     id: 5,
     go_date: "12/12/2024",
     done_date: "24/12/2024",
+    status: 'Received'
   },
   {
     id: 6,
     go_date: "12/12/2024",
     done_date: "24/12/2024",
+    status: 'none'
   },
   {
     id: 7,
     go_date: "12/12/2024",
     done_date: "24/12/2024",
+    status: 'none'
   },
 
 ];
@@ -73,9 +77,21 @@ const dataAll = [
 const Transfer = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
   const status = {
-      Received: "Đã đến",
-      notReceived: "Hủy",
-      none: null
+      Received: 
+      {
+        name: "Đã đến",
+        color: '#32b768'
+      },
+      notReceived: 
+      {
+        name: 'Đã hủy',
+        color: "red"
+      },
+      none: 
+      {
+        name: 'Đang vận chuyển',
+        color: "#00B2FF"
+      },
   }
   return (
     <>
@@ -120,18 +136,17 @@ const Transfer = ({ navigation }) => {
                   />
                   <View
                     style={{
-                      marginLeft: 10,
+                      marginLeft: 25,
                       borderWidth: 0,
                       borderColor: "red",
                       flex: 1,
                     }}
                   >
-                    <Text style={{ fontWeight: "bold" }}>
+                    <Text style={{ fontWeight: "bold", marginBottom: 5 }}>
                       Mã vận chuyển: TF234AF45
                     </Text>
-                    <Text>Ngày bắt đầu: 10/10/2023</Text>
                     <Text>Ngày dự kiến: ...10/10/2023</Text>
-                    <Text style={{alignSelf: "flex-end", marginTop: 10, color: '#32b768', fontWeight: '500'}}>Trạng thái: Đã đến</Text>
+                    <Text style={{ marginTop: 10, color: status[item.status].color, fontWeight: '700'}}> {status[item.status].name}</Text>
 
                   </View>
                 </TouchableOpacity>

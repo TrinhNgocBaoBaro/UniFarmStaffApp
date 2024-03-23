@@ -39,6 +39,7 @@ const DetailTransfer = ({ navigation }) => {
             style={{ height: 180, width: 180, borderRadius: 5 }}
             resizeMode="cover"
           />
+          <Text style={{marginTop: 20,  marginBottom: 20, fontSize: 18, fontWeight: 'bold', color: '#00B2FF'}}>Đang vận chuyển</Text>
    
         </View>
         <View style={{padding: 20}}>
@@ -90,8 +91,8 @@ const DetailTransfer = ({ navigation }) => {
                 <Text style={[styles.textTitle, {textAlign: 'center'}]}>Trạm Vinhomes Grand Park Masterise</Text>
              </View>   
           </View>
-          <View style={{padding: 20}}>
-            <Text style={{fontSize: 19, fontWeight: "600"}}>Đơn hàng</Text>
+          <View style={{padding: 20, marginVertical: 10}}>
+            <Text style={{fontSize: 18, fontWeight: "600"}}>Đơn hàng</Text>
             {dataOrderDone.map((item, index)=>(
                    <TouchableOpacity
                    key={index}
@@ -125,13 +126,13 @@ const DetailTransfer = ({ navigation }) => {
                        justifyContent: 'space-between'
                      }}
                    >
-                     <Text style={{ fontWeight: "bold" }}>
+                     <Text style={{ fontWeight: "bold", fontSize: 16 }}>
                        Mã đơn hàng: TF234AF45
                      </Text>
                      <Text style={{ }}>
                        Người nhận: Nguyễn Lee Hữu
                      </Text>
-                     <Text style={{alignSelf: 'flex-end', fontWeight: "bold" }}>Giá: 125.000đ</Text>
+                     <Text style={{alignSelf: 'flex-end', fontWeight: "bold" }}>125.000đ</Text>
                    </View>
                  </TouchableOpacity>
             ))}
@@ -145,6 +146,7 @@ const styles = StyleSheet.create({
     textTitle: {
         fontSize: 16,
         fontWeight: "500",
+        color: 'grey'
     },
     textInfo: {
         fontSize: 16,

@@ -28,7 +28,7 @@ const TabRoute = () => {
         },
         tabBarStyle: {
           backgroundColor: "#fff",
-          height: 60,
+          height: 90,
         },
       }}
     >

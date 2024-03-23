@@ -9,12 +9,56 @@ import {
 } from "react-native";
 import React from "react";
 import { ButtonFlex } from "../components/Button";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import createAxios from "../utils/axios";
+const API = createAxios();
 const Login = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [focusMail, setFocusMail] = React.useState(false);
   const [focusPassword, setFocusPassword] = React.useState(false);
+  const [noti,setNoti]= React.useState();
+
+  React.useEffect(()=>{
+    console.log("Email: ", email)
+  },[email])
+
+
+  const handleLogin = async () => {
+    if (email === "" || password === "") {
+      setNoti("Vui lòng nhập tài khoản hoặc mật khẩu!");
+      return;
+    }
+
+    try {
+      const response = await API.post(
+        `auth/login`,
+        {
+          "email": email,
+          "password": password
+        }
+      );
+      if (response.token) {
+        console.log(response.token)
+        console.log("Success")
+        AsyncStorage.setItem(
+          "UserToken",
+          JSON.stringify({ userToken: response.token})
+        )
+          .then(() => {
+            navigation.navigate("Home");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+        setNoti();
+      }
+    } catch (error) {
+      console.log(error);
+      setNoti("Sai tên tài khoản hoặc mật khẩu!");
+    }
+  };
+
   return (
     <SafeAreaView
       style={{
@@ -47,8 +91,6 @@ const Login = ({ navigation }) => {
           elevation: 3,
         }}
         placeholder="Email"
-        inputMode="numeric"
-        keyboardType="numeric"
         onChangeText={(newTextPhone) => setEmail(newTextPhone)}
         onFocus={() => setFocusMail(!focusMail)}
         onBlur={() => setFocusMail(!focusMail)}
@@ -87,7 +129,7 @@ const Login = ({ navigation }) => {
       </Text>
       <ButtonFlex
           title="Đăng nhập"
-          onPress={()=>{}}
+          onPress={handleLogin}
           stylesButton={{
             borderRadius: 20,
             paddingHorizontal: 30,

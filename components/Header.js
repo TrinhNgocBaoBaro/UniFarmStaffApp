@@ -8,7 +8,7 @@ export default function Header({ title, rightIcon, onPress, onPressRight }) {
             <View style={styles.top}>
                 <Pressable onPress={onPress}>
                     <View style={{ height: 40, width: 40, marginLeft: 20, justifyContent: 'center' }}>
-                        <Icon name="chevron-back-outline" size={30} color={"black"} />
+                        <Icon name="chevron-back-outline" size={28} color={"black"} />
                     </View>
                 </Pressable>
                 <View style={{ justifyContent: 'center' }}>                   
@@ -21,7 +21,7 @@ export default function Header({ title, rightIcon, onPress, onPressRight }) {
                         width:40, 
                         height: 40,
                         justifyContent: 'center' }}>
-                        <Icon name={rightIcon} size={30} color={"black"} />
+                        <Icon name={rightIcon} size={28} color={"black"} />
                 </View>
                 </Pressable>
             </View>
