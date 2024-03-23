@@ -14,6 +14,7 @@ import OrderScreen from "./screens/Order";
 import TransferScreen from "./screens/Transfer";
 import ProfileScreen from "./screens/Profile";
 import DetailTransfer from "./screens/DetailTransfer";
+import DetailOrder from "./screens/DetailOrder";
 const TabRoute = () => {
   return (
     <Tab.Navigator
@@ -27,7 +28,7 @@ const TabRoute = () => {
         },
         tabBarStyle: {
           backgroundColor: "#fff",
-          height: 90,
+          height: 60,
         },
       }}
     >
@@ -108,6 +109,8 @@ export default function App() {
           <Stack.Screen name="Transfer" component={TransferScreen} />
           <Stack.Screen name="Profile" component={ProfileScreen} />
           <Stack.Screen name="DetailTransfer" component={DetailTransfer} />
+          <Stack.Screen name="DetailOrder" component={DetailOrder} />
+
         </Stack.Navigator>
       </NavigationContainer>
     </GestureHandlerRootView>

@@ -32,7 +32,7 @@ const dataOrderDone = [
     done_date: "24/12/2024",
   },
 ];
-const Order = () => {
+const Order = ({navigation}) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
 
   return (
@@ -57,6 +57,7 @@ const Order = () => {
               data={dataOrder}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
+                  onPress={()=>navigation.navigate("DetailOrder")}
                   activeOpacity={0.8}
                   style={{
                     backgroundColor: "white",
