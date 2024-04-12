@@ -3,26 +3,50 @@ import React from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import Header from "../components/Header";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import createAxios from "../utils/axios";
+const API = createAxios();
+// const dataOrderDone = [
+//     {
+//         id: 1,
+//         go_date: "12/12/2024",
+//         done_date: "24/12/2024",
+//       },
+//       {
+//         id: 2,
+//         go_date: "12/12/2024",
+//         done_date: "24/12/2024",
+//       },
+//     {
+//       id: 3,
+//       go_date: "12/12/2024",
+//       done_date: "24/12/2024",
+//     },
+//   ];
 
-const dataOrderDone = [
-    {
-        id: 1,
-        go_date: "12/12/2024",
-        done_date: "24/12/2024",
-      },
-      {
-        id: 2,
-        go_date: "12/12/2024",
-        done_date: "24/12/2024",
-      },
-    {
-      id: 3,
-      go_date: "12/12/2024",
-      done_date: "24/12/2024",
-    },
-  ];
+const DetailTransfer = ({ navigation, route }) => {
 
-const DetailTransfer = ({ navigation }) => {
+  const transferId = route.params.transferId;
+  console.log(transferId)
+  const [dataOrder, setDataOrder] = React.useState([]);
+
+
+  const fetchDataOrderOfTransfer = async ()  => {
+    try {
+      const response = await API.get(`/orders/${transferId}?pageIndex=0&pageSize=100`)
+      if(response) {
+        console.log("Success get dataOrder")
+        console.log(response.payload)
+        setDataOrder(response.payload);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  React.useEffect(()=>{
+    if(transferId) fetchDataOrderOfTransfer();
+  },[])
+
   return (
     <>
       <Header
@@ -93,7 +117,7 @@ const DetailTransfer = ({ navigation }) => {
           </View>
           <View style={{padding: 20, marginVertical: 10}}>
             <Text style={{fontSize: 18, fontWeight: "600"}}>Đơn hàng</Text>
-            {dataOrderDone.map((item, index)=>(
+            {dataOrder.map((item, index)=>(
                    <TouchableOpacity
                    key={index}
                    activeOpacity={0.8}
@@ -127,12 +151,12 @@ const DetailTransfer = ({ navigation }) => {
                      }}
                    >
                      <Text style={{ fontWeight: "bold", fontSize: 16 }}>
-                       Mã đơn hàng: TF234AF45
+                       Mã đơn hàng: {item.code}
                      </Text>
                      <Text style={{ }}>
-                       Người nhận: Nguyễn Lee Hữu
+                       KH: {item.customerResponse.firstName} {item.customerResponse.lastName} 
                      </Text>
-                     <Text style={{alignSelf: 'flex-end', fontWeight: "bold" }}>125.000đ</Text>
+                     <Text style={{alignSelf: 'flex-end', fontWeight: "bold" }}>{item.totalAmount} đ</Text>
                    </View>
                  </TouchableOpacity>
             ))}

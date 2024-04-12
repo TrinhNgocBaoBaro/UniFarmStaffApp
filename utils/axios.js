@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const createAxios = () => {
   const api = axios.create({
     baseURL: baseURL,
-    timeout: 5000, // Thời gian chờ tối đa cho yêu cầu (ms)
+    timeout: 10000, // Thời gian chờ tối đa cho yêu cầu (ms)
     headers: {
       "Content-Type": "application/json; charset=utf-8", // Định dạng dữ liệu gửi đi
     },

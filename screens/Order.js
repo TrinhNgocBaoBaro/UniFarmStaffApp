@@ -5,35 +5,91 @@ import SegmentedControl from "@react-native-segmented-control/segmented-control"
 import { ButtonFlex } from "../components/Button";
 import Icon from "react-native-vector-icons/Ionicons";
 
+import createAxios from "../utils/axios";
+const API = createAxios();
 
+// const dataOrder = [
+//   {
+//     id: 1,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//   },
+//   {
+//     id: 2,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//   },
+//   {
+//     id: 3,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//   },
+// ];
 
-const dataOrder = [
-  {
-    id: 1,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
-  {
-    id: 2,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
-  {
-    id: 3,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
-];
-
-const dataOrderDone = [
-  {
-    id: 3,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
-];
+// const dataOrderDone = [
+//   {
+//     id: 3,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//   },
+// ];
 const Order = ({navigation}) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [dataOrder, setDataOrder] = React.useState([]);
+  const [dataOrderDone, setDataOrderDone] = React.useState([]);
+  const [aboutMe, setAboutMe] = React.useState();
+
+
+  const getDataAboutMe = async ()  => {
+    try {
+      const response = await API.get("/aboutMe")
+      if(response) {
+        console.log("Success get aboutMe")
+        setAboutMe(response)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(()=>{
+    getDataAboutMe();
+  },[])
+
+
+  const fetchDataOrder = async ()  => {
+    try {
+      const response = await API.get(`/station/orders?stationId=${aboutMe.station.id}&orderBy=CreatedAt&isAscending=false&pageIndex=0&pageSize=100`)
+      if(response) {
+        console.log("DataOrder",response.payload);
+        const filterData = response.payload.filter((e) => {
+              return e.deliveryStatus !== "PickedUp";
+        });
+        setDataOrder(filterData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const fetchDataOrderDone = async ()  => {
+    try {
+      const response = await API.get(`/station/orders?stationId=${aboutMe.station.id}&deliveryStatus=PickedUp&orderBy=CreatedAt&isAscending=false&pageIndex=0&pageSize=100`)
+      if(response) {
+        console.log("DataOrderDone",response.payload);
+        setDataOrderDone(response.payload);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  React.useEffect(()=>{
+    if(aboutMe){
+    fetchDataOrder();
+    fetchDataOrderDone();
+    }
+  },[])
 
   return (
     <>
@@ -87,11 +143,11 @@ const Order = ({navigation}) => {
                       flex: 1,
                     }}
                   >
-                    <Text style={{ fontWeight: "bold" }}>
-                      Mã đơn hàng: TF234AF45
+                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
+                      Mã đơn hàng: {item.code}
                     </Text>
-                    <Text>Ngày nhận: ...</Text>
-                    <Text>Giá: 100.000đ</Text>
+                    <Text>Khách hàng: {item.customerResponse.firstName} {item.customerResponse.lastName}</Text>
+                    <Text>Giá: {item.totalAmount} đ</Text>
                     <View style={{ alignSelf: "flex-end", marginTop: 10 }}>
                       <ButtonFlex
                         title="Xác nhận"
@@ -124,8 +180,8 @@ const Order = ({navigation}) => {
           </View>
         ) : (
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 80}}>
-          <Icon name={"file-tray-stacked"} size={70} color={"grey"} />
-        <Text style={{fontSize: 15, fontWeight: 500, color: "grey", marginTop: 15}}>Không có đơn hàng..</Text>
+          <Icon name={"file-tray-stacked"} size={70} color={"#d5d5d5"} />
+        <Text style={{fontSize: 15, fontWeight: 500, color: "grey", marginTop: 15}}>Không có đơn hàng...</Text>
         </View>
         ))}
         {selectedIndex === 1 && (dataOrderDone.length > 0 ? (
@@ -163,11 +219,11 @@ const Order = ({navigation}) => {
                       flex: 1,
                     }}
                   >
-                    <Text style={{ fontWeight: "bold" }}>
-                      Mã đơn hàng: TF234AF45
+                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
+                      Mã đơn hàng: {item.code}
                     </Text>
                     <Text>Ngày nhận: 10/10/2023</Text>
-                    <Text>Giá: 125.000đ</Text>
+                    <Text>Giá: {item.totalAmount} đ</Text>
   
                   </View>
                 </TouchableOpacity>
@@ -178,7 +234,7 @@ const Order = ({navigation}) => {
         ) : (
           <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', marginBottom: 80}}>
             <Icon name={"file-tray-stacked"} size={70} color={"#d5d5d5"} />
-          <Text style={{fontSize: 15, fontWeight: 500, color: "grey", marginTop: 15}}>Không có đơn hàng..</Text>
+          <Text style={{fontSize: 15, fontWeight: 500, color: "grey", marginTop: 15}}>Không có đơn hàng...</Text>
           </View>
         ))}
       </View>

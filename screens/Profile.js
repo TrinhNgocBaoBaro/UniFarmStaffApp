@@ -7,7 +7,7 @@ import {
   Pressable,
   StatusBar, 
   ScrollView,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import React from "react";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -18,6 +18,7 @@ const API = createAxios();
 const Profile = ({ navigation }) => {
 
   const [aboutMe, setAboutMe] = React.useState();
+  const [showStationInfo, setShowStationInfo] = React.useState(false);
 
   const getDataAboutMe = async ()  => {
     try {
@@ -107,20 +108,22 @@ const Profile = ({ navigation }) => {
   );
   return (
     <>
-      <SafeAreaView style={styles.top}>
+      <SafeAreaView>
+      <View style={styles.top}>
         <Pressable onPress={()=> navigation.goBack()}>
         <View style={{ height: 40, width: 40, marginLeft: 20, justifyContent: 'center' }}>
-          <Icon name="chevron-back-outline" size={28} color={"black"} />
+          <Icon name="person-outline" size={28} color={"black"} />
         </View>
         </Pressable>
         <View style={{ justifyContent: 'center' }}> 
             <Text style={{fontSize: 22, fontWeight: 'bold'}}>Tài khoản</Text>
         </View>
         <Pressable style={{ marginRight: 20, height: 40, width: 40, justifyContent: 'center' }} onPress={getDataAboutMe}>
-          <Icon name="person-outline" size={25} color={"black"} />
+          <Icon name="ellipsis-vertical" size={25} color={"black"} />
         </Pressable>
+        </View>
       </SafeAreaView>
-      <View style={{flex: 1, backgroundColor: 'white'}}>
+      <ScrollView style={{flex: 1, backgroundColor: 'white'}} contentContainerStyle={{paddingBottom: 80}} showsVerticalScrollIndicator={false}>
       <View style={styles.itemCard}>
         <Image
           source={{
@@ -153,8 +156,24 @@ const Profile = ({ navigation }) => {
         <Text style={{ marginVertical: 10, fontWeight: 'bold' }}>Thông tin trạm</Text>
         <View style={{borderWidth: 1, borderColor: '#d5d5d5', padding: 10, borderRadius: 8}}>
         <Text style={{lineHeight: 30, fontSize: 17, fontWeight: '500'}}>{aboutMe && aboutMe.station.name}</Text>
+        {showStationInfo ? 
+        <>
         <Text style={{lineHeight: 30, fontSize: 14, fontWeight: '500', color: 'grey'}}><Text style={{fontWeight: 'bold', color: 'black'}}>Mã số:</Text> {aboutMe && aboutMe.station.code}</Text>
         <Text style={{lineHeight: 30, fontSize: 14, fontWeight: '500', color: 'grey', width: "80%"}}><Text style={{fontWeight: 'bold', color: 'black'}}>Địa chỉ:</Text> {aboutMe && aboutMe.station.address}</Text>
+        <Pressable style={{justifyContent: 'center', alignItems: 'center', marginTop: 10}}
+              onPress={()=>{setShowStationInfo(false)}}>        
+          {/* <Icon name="notifications-outline" size={30} color={"grey"}/> */}
+          <Text style={{fontWeight: 'bold', color: '#2C72F5'}}>Thu gọn</Text>
+        </Pressable>
+        </>
+        :
+        <Pressable style={{justifyContent: 'center', alignItems: 'center', marginTop: 10}}
+              onPress={()=>{setShowStationInfo(true)}}>        
+          {/* <Icon name="notifications-outline" size={30} color={"grey"}/> */}
+          <Text style={{fontWeight: 'bold', color: '#2C72F5'}}>Chi tiết</Text>
+        </Pressable>
+        }
+        
         </View>
       </View>
       <View style={{ marginBottom: 12 }}>
@@ -202,7 +221,7 @@ const Profile = ({ navigation }) => {
             </View>
           </TouchableOpacity>
       </View>
-      </View>
+      </ScrollView>
     </>
   );
 };

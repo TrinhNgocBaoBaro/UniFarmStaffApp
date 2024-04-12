@@ -4,95 +4,193 @@ import MainHeader from "../components/MainHeader";
 import SegmentedControl from "@react-native-segmented-control/segmented-control";
 import { ButtonFlex } from "../components/Button";
 import Icon from "react-native-vector-icons/Ionicons";
+import createAxios from "../utils/axios";
+const API = createAxios();
 
-const dataTransfer = [
-  {
-    id: 1,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
-  {
-    id: 2,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
-  {
-    id: 3,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-  },
-];
+// const dataTransfer = [
+//   {
+//     id: 1,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//   },
+//   {
+//     id: 2,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//   },
+//   {
+//     id: 3,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//   },
+// ];
 
-const dataTransferDone = [
+// const dataTransferDone = [
 
-];
+// ];
 
-const dataAll = [
-  {
-    id: 1,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-    status: 'none'
-  },
-  {
-    id: 2,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-    status: 'Received'
-  },
-  {
-    id: 3,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-    status: 'none'
-  },
-  {
-    id: 4,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-    status: 'notReceived'
+// const dataAll = [
+//   {
+//     id: 1,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//     status: 'none'
+//   },
+//   {
+//     id: 2,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//     status: 'Received'
+//   },
+//   {
+//     id: 3,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//     status: 'none'
+//   },
+//   {
+//     id: 4,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//     status: 'notReceived'
 
-  },
-  {
-    id: 5,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-    status: 'Received'
-  },
-  {
-    id: 6,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-    status: 'none'
-  },
-  {
-    id: 7,
-    go_date: "12/12/2024",
-    done_date: "24/12/2024",
-    status: 'none'
-  },
+//   },
+//   {
+//     id: 5,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//     status: 'Received'
+//   },
+//   {
+//     id: 6,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//     status: 'none'
+//   },
+//   {
+//     id: 7,
+//     go_date: "12/12/2024",
+//     done_date: "24/12/2024",
+//     status: 'none'
+//   },
 
-];
+// ];
 
 const Transfer = ({ navigation }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [dataTransfer, setDataTransfer] = React.useState([]);
+  const [dataTransferDone, setDataTransferDone] = React.useState([]);
+  const [dataAll, setDataAll] = React.useState([]);
+  const [aboutMe, setAboutMe] = React.useState();
+
+
+  const getDataAboutMe = async ()  => {
+    try {
+      const response = await API.get("/aboutMe")
+      if(response) {
+        console.log("Success get aboutMe")
+        setAboutMe(response)
+      }
+    } catch (error) {
+      
+    }
+  }
+
+  React.useEffect(()=>{
+    getDataAboutMe();
+  },[])
+
   const status = {
       Received: 
       {
         name: "Đã đến",
         color: '#32b768'
       },
-      notReceived: 
+      none: 
       {
         name: 'Đã hủy',
         color: "red"
       },
-      none: 
+      Pending: 
       {
         name: 'Đang vận chuyển',
         color: "#00B2FF"
       },
   }
+
+  const fetchDataAll = async ()  => {
+    try {
+      const response = await API.get(`/transfers/getall?stationId=${aboutMe.station.id}&page=0&pageSize=10`)
+      if(response) {
+        console.log("Success get dataAll")
+        console.log("DataAll",response);
+        setDataAll(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const fetchDataTransfer = async ()  => {
+    try {
+      const response = await API.get(`/transfers/getall?stationId=${aboutMe.station.id}&status=Pending&page=0&pageSize=10`)
+      if(response) {
+        console.log("Success get dataTransfer")
+        console.log("Datatransfer",response);
+        setDataTransfer(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const fetchDataTransferDone = async ()  => {
+    try {
+      const response = await API.get(`/transfers/getall?stationId=${aboutMe.station.id}&status=Received&page=0&pageSize=10`)
+      if(response) {
+        console.log("Success get dataTransferDone")
+        console.log("DatatransferDone",response);
+        setDataTransferDone(response);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const changTransferStatus = async (id)  => {
+    try {
+      const response = await API.put("/transfers/update", 
+        {
+          id: id,
+          status: "Received",
+          noteReceived: "Đã nhận đủ"
+        }
+      )
+      if(response) {
+        console.log("Success change Transfer Done")
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  React.useEffect(()=>{
+    if(aboutMe){
+      fetchDataTransfer();
+      fetchDataTransferDone();
+      fetchDataAll();
+    }
+
+  },[])
+
+  function formatDatePicked(datePicked) {
+    const dateFormated = new Date(datePicked);
+    const day = dateFormated.getDate();
+    const month = dateFormated.getMonth() + 1; 
+    const year = dateFormated.getFullYear();
+    return `${day < 10 ? '0' + day : day}/${month < 10 ? '0' + month : month}/${year}`;
+}
+
   return (
     <>
       <MainHeader iconHeader={"file-tray-outline"} navigation={navigation} />
@@ -114,6 +212,7 @@ const Transfer = ({ navigation }) => {
               renderItem={({ item, index }) => (
                 <TouchableOpacity
                   activeOpacity={0.8}
+                  onPress={()=> navigation.navigate("DetailTransfer", {transferId: item.id})}
                   style={{
                     backgroundColor: "white",
                     padding: 10,
@@ -142,10 +241,17 @@ const Transfer = ({ navigation }) => {
                       flex: 1,
                     }}
                   >
-                    <Text style={{ fontWeight: "bold", marginBottom: 5 }}>
-                      Mã vận chuyển: TF234AF45
+                    <Text style={{ fontWeight: "bold", marginBottom: 5 }} numberOfLines={1}>
+                      Mã vận chuyển: {item.code}
                     </Text>
-                    <Text>Ngày dự kiến: ...10/10/2023</Text>
+                    {item.status === "Pending" ? 
+                      <Text>Ngày dự kiến: ...{formatDatePicked(item.expectedReceiveDate)}</Text>
+                      :
+                      <>
+                      <Text>Ngày nhận: ...{formatDatePicked(item.receivedDate)}</Text>
+                      <Text>Ghi chú: {item.noteReceived}</Text>
+                      </>
+                    }
                     <Text style={{ marginTop: 10, color: status[item.status].color, fontWeight: '700'}}> {status[item.status].name}</Text>
 
                   </View>
@@ -196,11 +302,14 @@ const Transfer = ({ navigation }) => {
                       flex: 1,
                     }}
                   >
-                    <Text style={{ fontWeight: "bold" }}>
-                      Mã vận chuyển: TF234AF45
+                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
+                      Mã vận chuyển: {item.code}
                     </Text>
-                    <Text>Ngày bắt đầu: 10/10/2023</Text>
-                    <Text>Ngày dự kiến: ...10/10/2023</Text>
+                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
+                      {item.id}
+                    </Text>
+                    <Text>Ngày bắt đầu: {formatDatePicked(item.createdAt)}</Text>
+                    <Text>Ngày dự kiến: ...{formatDatePicked(item.expectedReceiveDate)}</Text>
                     <View style={{ alignSelf: "flex-end", marginTop: 10 }}>
                       <ButtonFlex
                         title="Xác nhận"
@@ -219,7 +328,7 @@ const Transfer = ({ navigation }) => {
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                               },
-                              {text: 'OK', onPress: () => console.log('OK Pressed')},
+                              {text: 'OK', onPress: () => changTransferStatus(item.id)},
                             ]
                             )
                         }}
@@ -272,12 +381,12 @@ const Transfer = ({ navigation }) => {
                       flex: 1,
                     }}
                   >
-                    <Text style={{ fontWeight: "bold" }}>
-                      Mã vận chuyển: TF234AF45
+                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
+                      Mã vận chuyển: {item.code}
                     </Text>
-                    <Text>Ngày bắt đầu: 10/10/2023</Text>
-                    <Text>Ngày dự kiến: ...10/10/2023</Text>
-  
+                    <Text>Ngày nhận: ...{formatDatePicked(item.receivedDate)}</Text>
+                    <Text>Ghi chú: {item.noteReceived}</Text>
+
                   </View>
                 </TouchableOpacity>
               )}
