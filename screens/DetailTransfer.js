@@ -45,7 +45,7 @@ const DetailTransfer = ({ navigation, route }) => {
 
   React.useEffect(()=>{
     if(transferId) fetchDataOrderOfTransfer();
-  },[])
+  },[transferId])
 
   return (
     <>

@@ -84,12 +84,41 @@ const Order = ({navigation}) => {
     }
   }
 
+  const changOrderStatus = async (id, stationId, transferId)  => {
+    console.log("id", id);
+    console.log("stationId", stationId);
+
+    console.log("transferId", transferId);
+
+    try {
+      const response = await API.put("/station/orders/update-status", 
+      {
+        transferId: transferId,
+        orderId: id,
+        stationId: stationId,
+        deliveryStatus: "PickedUp"
+      }
+      )
+      if(response) {
+        console.log("Success change Order Done")
+        Alert.alert(
+          "Thông báo",
+          `Xác nhận đơn hàng thành công!`
+        );
+        fetchDataOrder();
+        fetchDataOrderDone();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   React.useEffect(()=>{
     if(aboutMe){
     fetchDataOrder();
     fetchDataOrderDone();
     }
-  },[])
+  },[aboutMe])
 
   return (
     <>
@@ -113,8 +142,8 @@ const Order = ({navigation}) => {
               data={dataOrder}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  onPress={()=>navigation.navigate("DetailOrder")}
-                  activeOpacity={0.8}
+                onPress={()=>navigation.navigate("DetailOrder", {detailOrder: item})}
+                activeOpacity={0.8}
                   style={{
                     backgroundColor: "white",
                     padding: 10,
@@ -146,6 +175,9 @@ const Order = ({navigation}) => {
                     <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
                       Mã đơn hàng: {item.code}
                     </Text>
+                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
+                      Trạng thái: {item.deliveryStatus}
+                    </Text>
                     <Text>Khách hàng: {item.customerResponse.firstName} {item.customerResponse.lastName}</Text>
                     <Text>Giá: {item.totalAmount} đ</Text>
                     <View style={{ alignSelf: "flex-end", marginTop: 10 }}>
@@ -166,7 +198,7 @@ const Order = ({navigation}) => {
                                 onPress: () => console.log('Cancel Pressed'),
                                 style: 'cancel',
                               },
-                              {text: 'OK', onPress: () => console.log('OK Pressed')},
+                              {text: 'OK', onPress: () => changOrderStatus(item.id, item.stationId ,item.transferResponse.id)},
                             ]
                             )
                         }}
@@ -191,6 +223,7 @@ const Order = ({navigation}) => {
               renderItem={({ item, index }) => (
                 <TouchableOpacity
                   activeOpacity={0.8}
+                  onPress={()=>navigation.navigate("DetailOrder", {detailOrder: item})}
                   style={{
                     backgroundColor: "white",
                     padding: 10,
@@ -222,7 +255,6 @@ const Order = ({navigation}) => {
                     <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
                       Mã đơn hàng: {item.code}
                     </Text>
-                    <Text>Ngày nhận: 10/10/2023</Text>
                     <Text>Giá: {item.totalAmount} đ</Text>
   
                   </View>

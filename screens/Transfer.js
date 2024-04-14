@@ -88,7 +88,7 @@ const Transfer = ({ navigation }) => {
     try {
       const response = await API.get("/aboutMe")
       if(response) {
-        console.log("Success get aboutMe")
+        console.log("Success get aboutMe 1")
         setAboutMe(response)
       }
     } catch (error) {
@@ -115,6 +115,11 @@ const Transfer = ({ navigation }) => {
       {
         name: 'Đang vận chuyển',
         color: "#00B2FF"
+      },
+      NotReceived: 
+      {
+        name: 'Không nhận được',
+        color: "#FF0040"
       },
   }
 
@@ -159,15 +164,21 @@ const Transfer = ({ navigation }) => {
 
   const changTransferStatus = async (id)  => {
     try {
-      const response = await API.put("/transfers/update", 
+      const response = await API.put("/transfer/update", 
         {
           id: id,
           status: "Received",
-          noteReceived: "Đã nhận đủ"
+          noteReceived: "Đã nhận đủ hàng"
         }
       )
       if(response) {
         console.log("Success change Transfer Done")
+        Alert.alert(
+          "Thông báo",
+          `Xác nhận vận chuyển thành công!`
+        );
+        fetchDataTransfer();
+        fetchDataTransferDone();
       }
     } catch (error) {
       console.log(error);
@@ -181,7 +192,7 @@ const Transfer = ({ navigation }) => {
       fetchDataAll();
     }
 
-  },[])
+  },[aboutMe])
 
   function formatDatePicked(datePicked) {
     const dateFormated = new Date(datePicked);
@@ -272,7 +283,7 @@ const Transfer = ({ navigation }) => {
               data={dataTransfer}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
-                  onPress={()=> navigation.navigate("DetailTransfer")}
+                  onPress={()=> navigation.navigate("DetailTransfer", {transferId: item.id})}
                   activeOpacity={0.8}
                   style={{
                     backgroundColor: "white",
@@ -304,9 +315,6 @@ const Transfer = ({ navigation }) => {
                   >
                     <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
                       Mã vận chuyển: {item.code}
-                    </Text>
-                    <Text style={{ fontWeight: "bold" }} numberOfLines={1}>
-                      {item.id}
                     </Text>
                     <Text>Ngày bắt đầu: {formatDatePicked(item.createdAt)}</Text>
                     <Text>Ngày dự kiến: ...{formatDatePicked(item.expectedReceiveDate)}</Text>
@@ -352,6 +360,7 @@ const Transfer = ({ navigation }) => {
               data={dataTransferDone}
               renderItem={({ item, index }) => (
                 <TouchableOpacity
+                  onPress={()=> navigation.navigate("DetailTransfer", {transferId: item.id})}
                   activeOpacity={0.8}
                   style={{
                     backgroundColor: "white",

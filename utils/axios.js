@@ -17,7 +17,6 @@ const createAxios = () => {
       const UserToken = await AsyncStorage.getItem("UserToken")
       const parseUserToken = JSON.parse(UserToken)
       if (UserToken) {
-        console.log("Token nè:",parseUserToken.userToken)
         config.headers['Authorization'] = `Bearer ${parseUserToken.userToken}` || `Bearer `;
       }
       return config;
